@@ -1,10 +1,10 @@
 {
-  "name": "mineskin-hash-rust",
+  "name": "@mineskin/hash-rust",
   "version": "0.0.0",
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
-    "name": "mineskin-hash-rust",
+    "name": "@mineskin/hash-rust",
     "triples": {}
   },
   "license": "MIT",
