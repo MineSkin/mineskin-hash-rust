@@ -24,15 +24,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mineskin/hash-rust@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@mineskin/hash-rust@workspace:."
-  dependencies:
-    "@napi-rs/cli": "npm:^2.18.4"
-    ava: "npm:^6.0.1"
-  languageName: unknown
-  linkType: soft
-
 "@napi-rs/cli@npm:^2.18.4":
   version: 2.18.4
   resolution: "@napi-rs/cli@npm:2.18.4"
@@ -963,6 +954,15 @@ __metadata:
   checksum: 10c0/f3d9464dd1816ecf6bdf2aec6ba32c0728022039d992f178237d8e289b48764fee4131319e72eedd4f7f094e22ded0af836c3187a7edc4595d28dd74368fd81d
   languageName: node
   linkType: hard
+
+"mineskin-hash-rust@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "mineskin-hash-rust@workspace:."
+  dependencies:
+    "@napi-rs/cli": "npm:^2.18.4"
+    ava: "npm:^6.0.1"
+  languageName: unknown
+  linkType: soft
 
 "minimatch@npm:^3.1.1":
   version: 3.1.2
