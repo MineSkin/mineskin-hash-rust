@@ -1,5 +1,5 @@
 {
-  "name": "mineskin-hash-rust-linux-x64-gnu",
+  "name": "@mineskin/hash-rust-linux-x64-gnu",
   "version": "0.0.0",
   "os": [
     "linux"
@@ -15,6 +15,7 @@
   "engines": {
     "node": ">= 10"
   },
+  "repository": "https://github.com/MineSkin/mineskin-hash-rust.git",
   "libc": [
     "glibc"
   ]

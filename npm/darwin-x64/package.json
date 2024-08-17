@@ -1,5 +1,5 @@
 {
-  "name": "mineskin-hash-rust-darwin-x64",
+  "name": "@mineskin/hash-rust-darwin-x64",
   "version": "0.0.0",
   "os": [
     "darwin"
@@ -14,5 +14,6 @@
   "license": "MIT",
   "engines": {
     "node": ">= 10"
-  }
+  },
+  "repository": "https://github.com/MineSkin/mineskin-hash-rust.git"
 }
