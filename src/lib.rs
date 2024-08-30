@@ -1,7 +1,5 @@
 #![deny(clippy::all)]
 
-mod pixel_cleaner;
-
 use lodepng::{FilterStrategy, RGBA};
 use sha2::{Digest, Sha256};
 use napi::{
@@ -9,7 +7,6 @@ use napi::{
     Env, Property, Result,
 };
 use napi_derive::napi;
-use crate::pixel_cleaner::clear_unused_pixels;
 
 #[macro_use]
 extern crate napi_derive;
@@ -30,7 +27,7 @@ pub struct ImageWithHashes {
     pub png: Buffer,
     pub minecraft_hash: Buffer,
     pub hash: Buffer,
-    pub hex: String,
+    // pub hex: String,
 }
 
 #[napi]
@@ -50,8 +47,6 @@ fn copy_slice(dst: &mut [u8], src: &[u8]) -> usize {
 // based on https://github.com/GeyserMC/global_api/blob/dev/1.0.2/native/skins/src/skin_convert/skin_codec.rs#L100
 //#[napi]
 pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageWithHashes {
-    println!("Buffer length: {}", buffer.len());
-
     let mut decoder = lodepng::Decoder::new();
     decoder.info_png_mut().interlace_method = 0; // should be 0 but just to be sure
 
@@ -60,13 +55,7 @@ pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageW
     let decoded_data = decoded1.bytes();
 
     let mut raw_data = vec![0; SKIN_DATA_LENGTH];
-    println!("Raw length: {}", raw_data.len());
-    //copy_slice(&mut raw_data, &decoded_data);
     decoded_data.clone_into(&mut raw_data);
-    //clear_unused_pixels(&mut raw_data, is_classic);
-
-
-
 
     // encode images like Minecraft does
     let mut encoder = lodepng::Encoder::new();
@@ -77,12 +66,12 @@ pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageW
     encoder_settings.zlibsettings.set_level(4);
     encoder_settings.filter_strategy = FilterStrategy::ZERO;
 
-    println!("Encoding image with width: {}, height: {}", width, height);
-    println!("Raw data length: {}", raw_data.len());
+    // println!("Encoding image with width: {}, height: {}", width, height);
+    // println!("Raw data length: {}", raw_data.len());
 
 
     let result = encoder.encode(&raw_data, width, height);
-    println!("Result: {:?}", result);
+    // println!("Result: {:?}", result);
     let png = result.unwrap();
 
     let mut hasher = Sha256::new();
@@ -94,20 +83,19 @@ pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageW
     hasher.update(&raw_data);
     let hash = hasher.finalize();
 
-    let hex = write_hex(Buffer::from(minecraft_hash.as_slice()).as_ref());
+    //let hex = write_hex(Buffer::from(minecraft_hash.as_slice()).as_ref());
 
     ImageWithHashes {
         png: Buffer::from(png.as_slice()),
         minecraft_hash: Buffer::from(minecraft_hash.as_slice()),
-        hash: Buffer::from(hash.as_slice()),
-        hex: hex
+        hash: Buffer::from(hash.as_slice())
     }
 }
 
-fn write_hex(bytes: &[u8]) -> String {
-    let mut s = String::with_capacity(2 * bytes.len());
-    for byte in bytes {
-        core::fmt::write(&mut s, format_args!("{:02X}", byte)).unwrap();
-    }
-    s
-}
+// fn write_hex(bytes: &[u8]) -> String {
+//     let mut s = String::with_capacity(2 * bytes.len());
+//     for byte in bytes {
+//         core::fmt::write(&mut s, format_args!("{:02X}", byte)).unwrap();
+//     }
+//     s
+// }

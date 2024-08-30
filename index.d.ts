@@ -9,5 +9,4 @@ export declare class ImageWithHashes {
   png: Buffer
   minecraftHash: Buffer
   hash: Buffer
-  hex: string
 }
