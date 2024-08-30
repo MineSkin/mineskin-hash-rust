@@ -34,8 +34,8 @@ pub struct ImageWithHashes {
 }
 
 #[napi]
-pub fn encode_image(buffer: &[u8], is_classic: bool) -> ImageWithHashes {
-    encode_custom_image(buffer, is_classic, SKIN_WIDTH, SKIN_HEIGHT)
+pub fn encode_image(buffer: &[u8]) -> ImageWithHashes {
+    encode_custom_image(buffer, SKIN_WIDTH, SKIN_HEIGHT)
 }
 
 fn copy_slice(dst: &mut [u8], src: &[u8]) -> usize {
@@ -49,7 +49,7 @@ fn copy_slice(dst: &mut [u8], src: &[u8]) -> usize {
 
 // based on https://github.com/GeyserMC/global_api/blob/dev/1.0.2/native/skins/src/skin_convert/skin_codec.rs#L100
 //#[napi]
-pub fn encode_custom_image(buffer: &[u8], is_classic: bool, width: usize, height: usize) -> ImageWithHashes {
+pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageWithHashes {
     println!("Buffer length: {}", buffer.len());
 
     let mut decoder = lodepng::Decoder::new();
@@ -61,8 +61,9 @@ pub fn encode_custom_image(buffer: &[u8], is_classic: bool, width: usize, height
 
     let mut raw_data = vec![0; SKIN_DATA_LENGTH];
     println!("Raw length: {}", raw_data.len());
-    copy_slice(&mut raw_data, &decoded_data);
-    clear_unused_pixels(&mut raw_data, is_classic);
+    //copy_slice(&mut raw_data, &decoded_data);
+    decoded_data.clone_into(&mut raw_data);
+    //clear_unused_pixels(&mut raw_data, is_classic);
 
 
 
