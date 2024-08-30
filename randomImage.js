@@ -1,5 +1,5 @@
 const fs = require('fs');
-const {createCanvas, loadImage} = require("canvas");
+const { createCanvas, loadImage } = require("canvas");
 
 function makeRandomImage(width = 64, height = 64) {
     const canvas = createCanvas(width, height);
@@ -13,6 +13,7 @@ function makeRandomImage(width = 64, height = 64) {
 
     for (let x = 0; x < width; x++) {
         for (let y = 0; y < height; y++) {
+            if (Math.random() < 0.3) continue;
             data[y * width + x] =
                 (255 << 24) |
                 (((Math.random() * 300) % 255) << 16) |
