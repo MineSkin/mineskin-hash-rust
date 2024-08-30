@@ -1,5 +1,7 @@
 #![deny(clippy::all)]
 
+mod pixel_cleaner;
+
 use lodepng::{FilterStrategy, RGBA};
 use sha2::{Digest, Sha256};
 use napi::{
@@ -7,13 +9,16 @@ use napi::{
     Env, Property, Result,
 };
 use napi_derive::napi;
+use crate::pixel_cleaner::clear_unused_pixels;
 
 #[macro_use]
 extern crate napi_derive;
 
-pub const SKIN_WIDTH: u8 = 64;
-pub const SKIN_HEIGHT: u8 = 64;
-pub const SKIN_CHANNELS: u8 = 4;
+pub const SKIN_WIDTH: usize = 64;
+pub const SKIN_HEIGHT: usize = 64;
+pub const SKIN_CHANNELS: usize = 4;
+
+const SKIN_DATA_LENGTH: usize = (SKIN_WIDTH * SKIN_HEIGHT * SKIN_CHANNELS);
 
 #[napi]
 pub fn sum(a: i32, b: i32) -> i32 {
@@ -29,17 +34,38 @@ pub struct ImageWithHashes {
 }
 
 #[napi]
-pub fn encode_image(buffer: &[u8]) -> ImageWithHashes {
-    encode_custom_image(buffer, SKIN_WIDTH as usize, SKIN_HEIGHT as usize)
+pub fn encode_image(buffer: &[u8], is_classic: bool) -> ImageWithHashes {
+    encode_custom_image(buffer, is_classic, SKIN_WIDTH, SKIN_HEIGHT)
+}
+
+fn copy_slice(dst: &mut [u8], src: &[u8]) -> usize {
+    let mut c = 0;
+    for (d, s) in dst.iter_mut().zip(src.iter()) {
+        *d = *s;
+        c += 1;
+    }
+    c
 }
 
 // based on https://github.com/GeyserMC/global_api/blob/dev/1.0.2/native/skins/src/skin_convert/skin_codec.rs#L100
 //#[napi]
-pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageWithHashes {
-    let mut raw_data = vec![0; width * height * SKIN_CHANNELS as usize];
-    buffer.iter().enumerate().for_each(|(i, byte)| {
-        raw_data[i] = *byte;
-    });
+pub fn encode_custom_image(buffer: &[u8], is_classic: bool, width: usize, height: usize) -> ImageWithHashes {
+    println!("Buffer length: {}", buffer.len());
+
+    let mut decoder = lodepng::Decoder::new();
+    decoder.info_png_mut().interlace_method = 0; // should be 0 but just to be sure
+
+    let decoded = decoder.decode(buffer);
+    let decoded1 = decoded.unwrap();
+    let decoded_data = decoded1.bytes();
+
+    let mut raw_data = vec![0; SKIN_DATA_LENGTH];
+    println!("Raw length: {}", raw_data.len());
+    copy_slice(&mut raw_data, &decoded_data);
+    clear_unused_pixels(&mut raw_data, is_classic);
+
+
+
 
     // encode images like Minecraft does
     let mut encoder = lodepng::Encoder::new();
@@ -52,6 +78,7 @@ pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageW
 
     println!("Encoding image with width: {}, height: {}", width, height);
     println!("Raw data length: {}", raw_data.len());
+
 
     let result = encoder.encode(&raw_data, width, height);
     println!("Result: {:?}", result);
@@ -66,7 +93,7 @@ pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageW
     hasher.update(&raw_data);
     let hash = hasher.finalize();
 
-    let hex = write_hex(minecraft_hash.as_ref());
+    let hex = write_hex(Buffer::from(minecraft_hash.as_slice()).as_ref());
 
     ImageWithHashes {
         png: Buffer::from(png.as_slice()),
