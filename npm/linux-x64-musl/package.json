@@ -1,6 +1,6 @@
 {
   "name": "@mineskin/hash-rust-linux-x64-musl",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "os": [
     "linux"
   ],
