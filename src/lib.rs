@@ -1,15 +1,11 @@
 #![deny(clippy::all)]
 
-use lodepng::{FilterStrategy, RGBA};
-use sha2::{Digest, Sha256};
-use napi::{
-    bindgen_prelude::{Buffer, ClassInstance, ObjectFinalize, This, Uint8Array, Unknown},
-    Env, Property, Result,
-};
-use napi_derive::napi;
-
 #[macro_use]
 extern crate napi_derive;
+use lodepng::FilterStrategy;
+use napi::bindgen_prelude::{Buffer, ObjectFinalize};
+use napi_derive::napi;
+use sha2::{Digest, Sha256};
 
 pub const SKIN_WIDTH: usize = 64;
 pub const SKIN_HEIGHT: usize = 64;
@@ -27,21 +23,11 @@ pub struct ImageWithHashes {
     pub png: Buffer,
     pub minecraft_hash: Buffer,
     pub hash: Buffer,
-    // pub hex: String,
 }
 
 #[napi]
 pub fn encode_image(buffer: &[u8]) -> ImageWithHashes {
     encode_custom_image(buffer, SKIN_WIDTH, SKIN_HEIGHT)
-}
-
-fn copy_slice(dst: &mut [u8], src: &[u8]) -> usize {
-    let mut c = 0;
-    for (d, s) in dst.iter_mut().zip(src.iter()) {
-        *d = *s;
-        c += 1;
-    }
-    c
 }
 
 // based on https://github.com/GeyserMC/global_api/blob/dev/1.0.2/native/skins/src/skin_convert/skin_codec.rs#L100
@@ -83,19 +69,9 @@ pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageW
     hasher.update(&raw_data);
     let hash = hasher.finalize();
 
-    //let hex = write_hex(Buffer::from(minecraft_hash.as_slice()).as_ref());
-
     ImageWithHashes {
         png: Buffer::from(png.as_slice()),
         minecraft_hash: Buffer::from(minecraft_hash.as_slice()),
         hash: Buffer::from(hash.as_slice())
     }
 }
-
-// fn write_hex(bytes: &[u8]) -> String {
-//     let mut s = String::with_capacity(2 * bytes.len());
-//     for byte in bytes {
-//         core::fmt::write(&mut s, format_args!("{:02X}", byte)).unwrap();
-//     }
-//     s
-// }
