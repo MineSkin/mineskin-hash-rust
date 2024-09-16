@@ -20,6 +20,6 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "libc": [
-    "glibc"
+    "musl"
   ]
 }
