@@ -209,7 +209,7 @@ jobs:
         node:
           - '18'
           - '20'
-    runs-on: ubuntu-latest
+    runs-on: alpine-latest
     steps:
       - uses: actions/checkout@v4
       - name: Enable Corepack
