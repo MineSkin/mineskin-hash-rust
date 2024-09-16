@@ -209,9 +209,11 @@ jobs:
         node:
           - '18'
           - '20'
-    runs-on: alpine-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install musl
+        run: sudo apt-get install musl-tools
       - name: Enable Corepack
         run: corepack enable
       - name: Setup node
