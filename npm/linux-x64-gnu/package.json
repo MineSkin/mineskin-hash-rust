@@ -16,6 +16,9 @@
     "node": ">= 10"
   },
   "repository": "https://github.com/MineSkin/mineskin-hash-rust.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "libc": [
     "glibc"
   ]

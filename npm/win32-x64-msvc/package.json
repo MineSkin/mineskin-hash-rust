@@ -15,5 +15,8 @@
   "engines": {
     "node": ">= 10"
   },
-  "repository": "https://github.com/MineSkin/mineskin-hash-rust.git"
+  "repository": "https://github.com/MineSkin/mineskin-hash-rust.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
 }
