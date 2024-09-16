@@ -1,0 +1,25 @@
+{
+  "name": "@mineskin/hash-rust-linux-x64-musl",
+  "version": "1.0.0",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "mineskin-hash-rust.linux-x64-musl.node",
+  "files": [
+    "mineskin-hash-rust.linux-x64-musl.node"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  },
+  "repository": "https://github.com/MineSkin/mineskin-hash-rust.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "libc": [
+    "glibc"
+  ]
+}
