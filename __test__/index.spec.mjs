@@ -34,7 +34,8 @@ for (const params of [
     ['images/randomImage1.png', '512e1f13b41b6214c7e2597c3a69a06f56564eed5e5d42b3c8f519c079c47806'],
     ['images/randomImage2.png', '57a6d6ddebafe045e9a0501c7c489f6de47e670fc4ef1b0c1b2c2a9a2c8c0cbc'],
     ['images/randomImage3.png', '1b84a8081994cce186eeae4787f95bce663d6711272782ce659d9cc954fec435'],
-    ['images/randomImage4.png', 'e19abca2800650b449fff3f12ed3d1bd0f20861d7cdd00c66d62264b52837e2c']
+    ['images/randomImage4.png', 'e19abca2800650b449fff3f12ed3d1bd0f20861d7cdd00c66d62264b52837e2c'],
+    ['images/trimmed0.png', '0aa97a60ff386b6075aea693893106358def0cd580e6360599811e08bde38b6f'] // mojang strips the leading 0, this doesn't currently
 ]) {
     test(testEncode, ...params);
 }
