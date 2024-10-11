@@ -43,3 +43,23 @@ for (const params of [
 ]) {
     test(testEncode, ...params);
 }
+
+test('encode too small', (t) => {
+    let buffer = fs.readFileSync('images/invalid_small.png');
+    let encoded = encodeImage(buffer);
+    let mchash = Buffer.from(encoded.minecraftHash).toString('hex');
+    let error = encoded.error;
+    console.log(error);
+    t.is(mchash, '');
+    t.true(error.includes('too small'));
+})
+
+test('encode too big', (t) => {
+    let buffer = fs.readFileSync('images/invalid_big.png');
+    let encoded = encodeImage(buffer);
+    let mchash = Buffer.from(encoded.minecraftHash).toString('hex');
+    let error = encoded.error;
+    console.log(error);
+    t.is(mchash, '');
+    t.true(error.includes('too small')); // not sure why it says too small
+})

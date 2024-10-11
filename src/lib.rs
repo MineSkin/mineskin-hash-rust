@@ -15,7 +15,7 @@ const SKIN_DATA_LENGTH: usize = (SKIN_WIDTH * SKIN_HEIGHT * SKIN_CHANNELS);
 
 #[napi]
 pub fn sum(a: i32, b: i32) -> i32 {
-  a + b
+    a + b
 }
 
 #[napi]
@@ -23,6 +23,7 @@ pub struct ImageWithHashes {
     pub png: Buffer,
     pub minecraft_hash: Buffer,
     pub hash: Buffer,
+    pub error: Option<String>,
 }
 
 #[napi]
@@ -37,6 +38,15 @@ pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageW
     decoder.info_png_mut().interlace_method = 0; // should be 0 but just to be sure
 
     let decoded = decoder.decode(buffer);
+    if decoded.is_err() {
+        let error = decoded.unwrap_err();
+        return ImageWithHashes {
+            png: Buffer::from(vec![]),
+            minecraft_hash: Buffer::from(vec![]),
+            hash: Buffer::from(vec![]),
+            error: Some(format!("{:?}", error)),
+        };
+    }
     let decoded1 = decoded.unwrap();
     let decoded_data = decoded1.bytes();
 
@@ -58,6 +68,15 @@ pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageW
 
     let result = encoder.encode(&raw_data, width, height);
     // println!("Result: {:?}", result);
+    if result.is_err() {
+        let error = result.unwrap_err();
+        return ImageWithHashes {
+            png: Buffer::from(vec![]),
+            minecraft_hash: Buffer::from(vec![]),
+            hash: Buffer::from(vec![]),
+            error: Some(format!("{:?}", error)),
+        };
+    }
     let png = result.unwrap();
 
     let mut hasher = Sha256::new();
@@ -72,6 +91,7 @@ pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageW
     ImageWithHashes {
         png: Buffer::from(png.as_slice()),
         minecraft_hash: Buffer::from(minecraft_hash.as_slice()),
-        hash: Buffer::from(hash.as_slice())
+        hash: Buffer::from(hash.as_slice()),
+        error: None,
     }
 }
