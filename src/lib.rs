@@ -31,6 +31,11 @@ pub fn encode_image(buffer: &[u8]) -> ImageWithHashes {
     encode_custom_image(buffer, SKIN_WIDTH, SKIN_HEIGHT)
 }
 
+#[napi]
+pub fn encode_image_size(buffer: &[u8], width: u8, height: u8) -> ImageWithHashes {
+    encode_custom_image(buffer, width as usize, height as usize)
+}
+
 // based on https://github.com/GeyserMC/global_api/blob/dev/1.0.2/native/skins/src/skin_convert/skin_codec.rs#L100
 //#[napi]
 pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageWithHashes {
@@ -50,7 +55,7 @@ pub fn encode_custom_image(buffer: &[u8], width: usize, height: usize) -> ImageW
     let decoded1 = decoded.unwrap();
     let decoded_data = decoded1.bytes();
 
-    let mut raw_data = vec![0; SKIN_DATA_LENGTH];
+    let mut raw_data = vec![0; width * height * SKIN_CHANNELS];
     decoded_data.clone_into(&mut raw_data);
 
     // encode images like Minecraft does

@@ -33,6 +33,6 @@ function makeRandomImage(width = 64, height = 64) {
 }
 
 (() => {
-    const { imageBuffer, imageData, data, blob } = makeRandomImage(128, 128);
+    const { imageBuffer, imageData, data, blob } = makeRandomImage(64, 32);
     fs.writeFileSync(`images/randomImage${Math.round(Math.random()*100)}.png`, imageBuffer);
 })();

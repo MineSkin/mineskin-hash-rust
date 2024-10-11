@@ -310,8 +310,9 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { sum, ImageWithHashes, encodeImage } = nativeBinding
+const { sum, ImageWithHashes, encodeImage, encodeImageSize } = nativeBinding
 
 module.exports.sum = sum
 module.exports.ImageWithHashes = ImageWithHashes
 module.exports.encodeImage = encodeImage
+module.exports.encodeImageSize = encodeImageSize

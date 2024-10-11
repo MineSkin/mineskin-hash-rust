@@ -5,6 +5,7 @@
 
 export declare function sum(a: number, b: number): number
 export declare function encodeImage(buffer: Uint8Array): ImageWithHashes
+export declare function encodeImageSize(buffer: Uint8Array, width: number, height: number): ImageWithHashes
 export declare class ImageWithHashes {
   png: Buffer
   minecraftHash: Buffer
