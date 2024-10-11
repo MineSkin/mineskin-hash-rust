@@ -1,6 +1,6 @@
 {
   "name": "@mineskin/hash-rust",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
@@ -36,5 +36,11 @@
     "version": "napi version"
   },
   "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72",
-  "repository": "https://github.com/MineSkin/mineskin-hash-rust.git"
+  "repository": "https://github.com/MineSkin/mineskin-hash-rust.git",
+  "optionalDependencies": {
+    "@mineskin/hash-rust-win32-x64-msvc": "1.0.4",
+    "@mineskin/hash-rust-darwin-x64": "1.0.4",
+    "@mineskin/hash-rust-linux-x64-gnu": "1.0.4",
+    "@mineskin/hash-rust-linux-x64-musl": "1.0.4"
+  }
 }
