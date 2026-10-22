@@ -25,14 +25,16 @@ jobs:
       fail-fast: false
       matrix:
         settings:
+          # The napi-rs builder images ship rustc 1.82/1.83 and can't update their stable toolchain in place,
+          # so install a pinned newer one next to it.
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
-            build: yarn build --target x86_64-unknown-linux-gnu
+            build: rustup toolchain install 1.90.0 --profile minimal && RUSTUP_TOOLCHAIN=1.90.0 yarn build --target x86_64-unknown-linux-gnu
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
-            build: yarn build --target x86_64-unknown-linux-musl
+            build: rustup toolchain install 1.90.0 --profile minimal && RUSTUP_TOOLCHAIN=1.90.0 yarn build --target x86_64-unknown-linux-musl
           - host: macos-latest
             target: x86_64-apple-darwin
             build: yarn build --target x86_64-apple-darwin
@@ -130,8 +132,8 @@ jobs:
           - host: windows-latest
             target: x86_64-pc-windows-msvc
         node:
-          - '18'
-          - '20'
+          - '22'
+          - '24'
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v4
@@ -169,8 +171,8 @@ jobs:
       fail-fast: false
       matrix:
         node:
-          - '18'
-          - '20'
+          - '22'
+          - '24'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
